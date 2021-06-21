@@ -126,11 +126,9 @@ class QuizFragment : Fragment() {
                     }
                 else -> {
                     sharedPreferences.edit().putInt((currentQuestion.idQuestion).toString(), -1).apply()
-//                    binding.invalidateAll()
-//                    binding.nextButton.isEnabled=false
-                }
                 }
             }
+        }
 
         binding.nextButton.setOnClickListener {
             when (indexQuestion) {
@@ -141,7 +139,7 @@ class QuizFragment : Fragment() {
                 9 -> {
                     for(i in 1..10){
                         if (sharedPreferences.getInt(i.toString(),0)==questions[i-1].indexValidAnswer)
-                        result +=1
+                        result += 1
                     }
 
                     val list = arrayListOf<String>()
