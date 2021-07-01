@@ -182,6 +182,7 @@ class QuizFragment : Fragment() {
             if (indexQuestion!=0)
                 indexQuestion -= 1
                 setQuestion()
+                setTheme()
             }
 
         binding.previousButton.setOnClickListener {
