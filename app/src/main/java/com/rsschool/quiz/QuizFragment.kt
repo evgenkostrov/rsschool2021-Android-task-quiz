@@ -4,6 +4,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
@@ -12,8 +13,6 @@ import com.rsschool.quiz.databinding.FragmentQuizBinding
 
 class QuizFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
     private var _binding: FragmentQuizBinding? = null
     private val binding get() = _binding!!
     private lateinit var sharedPreferences: SharedPreferences
@@ -94,6 +93,27 @@ class QuizFragment : Fragment() {
             for(i in 1..10)
                 sharedPreferences.edit().putInt(i.toString(),-1).apply()
         }
+         fun setTheme(){
+            val typedValue = TypedValue()
+             val arrayTheme = arrayOf(R.style.Theme_Quiz_First, R.style.Theme_Quiz_Second,
+                 R.style.Theme_Quiz_Third, R.style.Theme_Quiz_Fourth, R.style.Theme_Quiz_Fifth)
+            val currentTheme = context?.theme
+            currentTheme?.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
+            currentTheme?.resolveAttribute(android.R.attr.background, typedValue, true)
+            currentTheme?.resolveAttribute(android.R.attr.colorPrimaryDark, typedValue, true)
+            binding.toolbar.background = ColorDrawable(typedValue.data)
+            val window = activity?.window
+            window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window?.decorView?.setBackgroundColor(typedValue.data)
+            window?.statusBarColor =typedValue.data
+             currentTheme?.applyStyle(arrayTheme.random(), true)
+//             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                 activity?.window?.statusBarColor = activity?.getColor(R.color.yellow_100_dark)!!
+//             }
+
+        }
+
+        setTheme()
         clearRadioCheck()
         setQuestion()
         val intent = Intent(requireContext(),ResultActivity::class.java)
@@ -144,7 +164,8 @@ class QuizFragment : Fragment() {
 
                     val list = arrayListOf<String>()
                     for (i in 0..9){
-                        list.add(i,"${questions[i].idQuestion}. ${questions[i].theQuestion}  \n  Your answer:${questions[i].theAnswer[sharedPreferences.getInt((i+1).toString(),0)-1]}"
+                        list.add(i,"${questions[i].idQuestion}. ${questions[i].theQuestion}  " +
+                                "\n  Your answer:${questions[i].theAnswer[sharedPreferences.getInt((i+1).toString(),0)-1]}"
 
                         )}
                     intent.putExtra("Answer", list)
@@ -154,16 +175,7 @@ class QuizFragment : Fragment() {
                     requireActivity().finish()
                 }
             }
-
-            val typedValue = TypedValue()
-            val currentTheme = context?.theme
-            currentTheme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
-            currentTheme?.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
-            val window = activity?.window
-            binding.toolbar.background = ColorDrawable(typedValue.data)
-            window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window?.decorView?.setBackgroundColor(typedValue.data)
-            window?.statusBarColor = typedValue.data
+            setTheme()
             }
 
         binding.toolbar.setNavigationOnClickListener {
@@ -175,16 +187,7 @@ class QuizFragment : Fragment() {
         binding.previousButton.setOnClickListener {
             indexQuestion -= 1
             setQuestion()
-
-            val typedValue = TypedValue()
-            val currentTheme = context?.theme
-            currentTheme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
-            currentTheme?.resolveAttribute(android.R.attr.colorPrimaryDark, typedValue, true)
-            val window = activity?.window
-            binding.toolbar.background = ColorDrawable(typedValue.data)
-            window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window?.decorView?.setBackgroundColor(typedValue.data)
-            window?.statusBarColor = typedValue.data
+            setTheme()
             }
         }
 
